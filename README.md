@@ -21,15 +21,16 @@ In your test classes that subclass `DecoyUITestCase`, initiate the setup as foll
 
 ```
 override func setUp() {
-  super.setUpDecoy()
+  super.setUpDecoy(mode: .stubbing)
 }
 ```
 
-When you want to record a decoy, set up like this:
+When you want to record a decoy, first decide for how many days you'd like your mock to be valid.
+In this case, we're saying 7 days – you can use 0 for an always-valid recording. Then, set up like this:
 
 ```
 override func setUp() {
-  super.setUpDecoy(isRecording: true)
+  super.setUpDecoy(mode: .recording(7))
 }
 ```
 
