@@ -30,7 +30,7 @@ open class DecoyUITestCase: XCTestCase {
     app = XCUIApplication()
 
     /// Set environment variables for the app launch.
-    prepareEnvironment(url: url, isRecording: isRecording, name: name)
+    prepareEnvironment(url: url, isRecording: isRecording, name: decoyName)
 
     /// Launch the application for UI testing.
     app.launch()
@@ -58,7 +58,7 @@ private extension DecoyUITestCase {
     var url = URL(string: path)
 
     url?.deleteLastPathComponent()
-    url?.safeAppend(path: DecoyHub.Constants.decoysFolder)
+    url?.safeAppend(path: Decoy.Constants.decoysFolder)
 
     return url
   }
@@ -69,10 +69,10 @@ private extension DecoyUITestCase {
   ///   - isRecording: Indicates whether the test is in recording mode.
   ///   - name: The name of the test.
   func prepareEnvironment(url: URL, isRecording: Bool, name: String) {
-    app.launchEnvironment[DecoyHub.Constants.isRecording] = String(isRecording)
-    app.launchEnvironment[DecoyHub.Constants.isXCUI] = String(true)
-    app.launchEnvironment[DecoyHub.Constants.decoyPath] = url.absoluteString
-    app.launchEnvironment[DecoyHub.Constants.decoyFilename] = (name + ".json")
+    app.launchEnvironment[Decoy.Constants.isRecording] = String(isRecording)
+    app.launchEnvironment[Decoy.Constants.isXCUI] = String(true)
+    app.launchEnvironment[Decoy.Constants.decoyPath] = url.absoluteString
+    app.launchEnvironment[Decoy.Constants.decoyFilename] = (name + ".json")
   }
 }
 
