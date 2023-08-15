@@ -9,9 +9,9 @@ open class DecoyUITestCase: XCTestCase {
 
   /// Sets up the testing environment for Decoy-based UI tests.
   /// - Parameters:
-  ///   - path: The file path at which decoy configurations will be read from or written to. Defaults to the current file path
-  ///   - isRecording: Indicates whether the test is in recording mode. Defaults to `false`.
-  public func setUpDecoy(path: String = #filePath, isRecording: Bool = false) {
+  ///   - path: The file path at which decoy configurations will be read from or written to. Defaults to the current file path.
+  ///   - mode: The mode in which the tests in this case should run. Defaults to `.stubbing`.
+  public func setUpDecoy(path: String = #filePath, mode: DecoyTestMode = .stubbing) {
     super.setUp()
 
     /// Prepare the URL based on the provided path.
@@ -30,7 +30,7 @@ open class DecoyUITestCase: XCTestCase {
     app = XCUIApplication()
 
     /// Set environment variables for the app launch.
-    prepareEnvironment(url: url, isRecording: isRecording, name: decoyName)
+    prepareEnvironment(url: url, mode: mode, name: decoyName)
 
     /// Launch the application for UI testing.
     app.launch()
@@ -68,9 +68,9 @@ private extension DecoyUITestCase {
   ///   - url: The URL pointing to decoy configurations.
   ///   - isRecording: Indicates whether the test is in recording mode.
   ///   - name: The name of the test.
-  func prepareEnvironment(url: URL, isRecording: Bool, name: String) {
-    app.launchEnvironment[Decoy.Constants.isRecording] = String(isRecording)
+  func prepareEnvironment(url: URL, mode: DecoyTestMode, name: String) {
     app.launchEnvironment[Decoy.Constants.isXCUI] = String(true)
+    app.launchEnvironment[Decoy.Constants.decoyMode] = mode.rawValue
     app.launchEnvironment[Decoy.Constants.decoyPath] = url.absoluteString
     app.launchEnvironment[Decoy.Constants.decoyFilename] = (name + ".json")
   }
