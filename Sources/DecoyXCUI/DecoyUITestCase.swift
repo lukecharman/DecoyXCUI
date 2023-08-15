@@ -66,7 +66,7 @@ private extension DecoyUITestCase {
   /// Sets the necessary environment variables before the app launch.
   /// - Parameters:
   ///   - url: The URL pointing to decoy configurations.
-  ///   - isRecording: Indicates whether the test is in recording mode.
+  ///   - mode: Indicates the mode in which the test is running (i.e. `recording` or `stubbing`.
   ///   - name: The name of the test.
   func prepareEnvironment(url: URL, mode: Decoy.TestMode, name: String) {
     app.launchEnvironment[Decoy.Constants.isXCUI] = String(true)
