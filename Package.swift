@@ -11,7 +11,7 @@ let package = Package(
     ),
   ],
   dependencies: [
-    .package(url: "https://github.com/lukecharman/Decoy", branch: "main")
+    .package(path: "../Decoy")
   ],
   targets: [
     .target(

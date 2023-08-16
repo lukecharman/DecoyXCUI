@@ -26,6 +26,12 @@ open class DecoyUITestCase: XCTestCase {
       return
     }
 
+    /// Check whether the stub has expired. If so, fail the test up front to avoid wasting time.
+    guard !stubHasExpired(at: url, name: decoyName) else {
+      XCTFail("Stub has been recorded, but has expired. Needs to be re-recorded.")
+      return
+    }
+
     /// Initialize the app instance.
     app = XCUIApplication()
 
@@ -73,6 +79,31 @@ private extension DecoyUITestCase {
     app.launchEnvironment[Decoy.Constants.decoyMode] = mode.stringValue
     app.launchEnvironment[Decoy.Constants.decoyPath] = url.absoluteString
     app.launchEnvironment[Decoy.Constants.decoyFilename] = (name + ".json")
+  }
+
+  func stubHasExpired(at url: URL, name: String) -> Bool {
+    guard var fileURL = URL(string: "file://" + url.absoluteString) else {
+      return false
+    }
+
+    fileURL.safeAppend(path: name + ".json")
+
+    do {
+      /// Read the file's content
+      let data = try Data(contentsOf: fileURL)
+
+      /// Decode the JSON to get the "expiresAt" value
+      guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]] else {
+        return true
+      }
+
+      /// Parse it and check the date.
+      print(json)
+    } catch {
+      return false
+    }
+
+    return false
   }
 }
 
